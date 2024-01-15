@@ -3,7 +3,13 @@
 //partea care creaza structura html de baza
 
 let container = document.createElement("div");
+let styleLink = document.createElement("link");
+
+styleLink.setAttribute("href", "beforeGameStyles.css");
+styleLink.setAttribute("rel", "stylesheet");
+
 document.body.appendChild(container);
+document.head.appendChild(styleLink);
 container.classList.add("container");
 container.innerHTML = `
   <div class="players-box">
@@ -170,6 +176,8 @@ submitBtn.addEventListener("click", function () {
   let answerLink = answer.value;
   let difficultyLink = difficulty.value;
   createURL(categoryLink, difficultyLink, answerLink);
+  document.body.removeChild(container);
+  document.head.removeChild(styleLink);
 });
 
 function createURL(par1, par2, par3) {
