@@ -15,20 +15,17 @@ container.innerHTML = `
     <input type="text" placeholder="Player1" class="box player1"/>
   </div>
   <div class="game-box">
-    <div class="difficulty-box">
-      <h1>Select difficulty</h1>
-      <select class="difficulty-dropdown"id="difficulty" name="difficulty">
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-      </select> 
+    <div>
+      <select class="dropdown" id="difficulty" ></select> 
     </div>
-    <div class="answers-type-box">
-    
+   
+    <div>
+      <select class="dropdown" id="category"></select>
     </div>
-    <div class="category-box">
-    
+    <div>
+      <select class="dropdown" id="answer-type"></select>
     </div>
+    <div></div>
   </div>
 `;
 //partea ce se ocupa cu butoanele de creare a jucatorilor maxim 4 minim 1
@@ -65,11 +62,80 @@ deletePlayerBtn.addEventListener("click", function () {
     playerNr--;
   }
 });
+//partea din dreapta - Game
+//array ce contin valori si numele optiunilor in ordine
 
-// partea ce se ocupa de dropdown-ul de dificultate
+let difficultyOptions = [
+  "Select difficulty",
+  "Any difficulty",
+  "Easy",
+  "Medium",
+  "Hard",
+];
+let difficultyValues = [
+  "",
+  "",
+  "&difficulty=easy",
+  "&difficulty=medium",
+  "&difficulty=hard",
+];
+let answerOptions = [
+  "Select answer type",
+  "Any type",
+  "With multiple answers",
+  "With 2 answers",
+];
+let answerValues = ["", "", "&type=multiple", "&type=boolean"];
+let categoryOptions = [
+  "Select category",
+  "All categories",
+  "General Knowledge",
+  "Entertainment: Books",
+  "Entertainment: Film",
+  "Entertainment: Music",
+  "Entertainment: Musicals & Theatres",
+  "Entertainment: Television",
+  "Entertainment: Video Games",
+  "Entertainment: Board Games",
+  "Science & Nature",
+  "Science: Computers",
+  "Science: Mathematics",
+  "Mythology",
+  "Sports",
+  "Geography",
+  "History",
+  "Politics",
+  "Art",
+  "Celebrities",
+  "Animals",
+  "Vehicles",
+  "Entertainment: Comics",
+  "Science: Gadgets",
+  "Entertainment: Japanese Anime & Manga",
+  "Entertainment: Cartoon & Animations",
+];
 
-let difficultyDropDown = document.getElementById("difficulty");
-difficultyDropDown.value = "easy";
+let categoryValues = ["", "", "&category=9", "&category=10"];
+// functie ce itereaza prin array-urile de values si de nume
+let difficulty = document.getElementById("difficulty");
+let category = document.getElementById("category");
+let answer = document.getElementById("answer-type");
+function createOptions(selectedElement, optionsArray, valuesArray) {
+  //selectedElement = difficulty (ex.), optionsArray = difficultyOptions, valuesArray = difficultyValues
+  for (let i = 0; i < optionsArray.length; i++) {
+    let option = document.createElement("option");
+    option.value = valuesArray[i];
+    option.text = optionsArray[i];
+    selectedElement.appendChild(option);
+  }
+}
+createOptions(difficulty, difficultyOptions, difficultyValues);
+createOptions(answer, answerOptions, answerValues);
+/*
+partea ce se ocupa de dropdown-ul de dificultate.
+
+let difficulty = document.getElementById("difficulty");
+console.log(difficulty.value);
 
 difficultyDropDown.addEventListener("change", function () {
   let selectedOption = this.options[this.selectedIndex];
@@ -85,3 +151,4 @@ difficultyDropDown.addEventListener("change", function () {
 
   this.selectedOption = selectedOption;
 });
+*/

@@ -75,20 +75,13 @@ input[type="text"]:hover {
   border-radius: 10px;
   padding: 20px;
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
 }
-.difficulty-box {
+.game-box div {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding: 0px 20px;
 }
-.difficulty-box h1 {
-  color: #fff;
-  font-size: 22px;
-  width: 100%;
-}
-.difficulty-dropdown {
+.dropdown {
   outline: none;
   height: 30px;
   padding-left: 5px;
