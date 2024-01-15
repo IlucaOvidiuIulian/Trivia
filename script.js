@@ -163,16 +163,18 @@ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 */
 
 // PARTEA CE SE OCUPA DE BUTONUL DE SUBMIT SI SALVEAZA URL-ul pentru fetch;
-let url = "https://opentdb.com/api.php?amount=50";
+let url;
 let submitBtn = document.getElementById("submit");
 submitBtn.addEventListener("click", function () {
   let categoryLink = category.value;
   let answerLink = answer.value;
   let difficultyLink = difficulty.value;
-
-  url = url + categoryLink + difficultyLink + answerLink;
-  console.log(url);
+  createURL(categoryLink, difficultyLink, answerLink);
 });
 
-//captureaza playerul si valoarea inputului sau.
+function createURL(par1, par2, par3) {
+  url = "https://opentdb.com/api.php?amount=50";
+  url = url + par1 + par2 + par3;
+  console.log(url);
+}
 // capturat in arrayul cu numele players.
