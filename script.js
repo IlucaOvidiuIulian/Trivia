@@ -1,6 +1,18 @@
 "use strict";
 
-//partea care creaza structura html de baza
+async function getDataFromApi() {
+  let obj;
+
+  const res = await fetch('https://opentdb.com/api.php?amount=10')
+
+  obj = await res.json();
+
+  return obj
+}
+
+console.log(getDataFromApi());
+
+// partea care creaza structura html de baza
 
 let container = document.createElement("div");
 let styleLink = document.createElement("link");
@@ -36,13 +48,13 @@ container.innerHTML = `
     <button id="submit" class="btn submit">Start Game</button></div>
   </div>
 `;
-//partea ce se ocupa cu butoanele de creare a jucatorilor maxim 4 minim 1
+// partea ce se ocupa cu butoanele de creare a jucatorilor maxim 4 minim 1
 let createPlayerBtn = document.getElementById("create-player");
 let deletePlayerBtn = document.getElementById("delete-player");
 let firstPlayer = document.getElementById("player1");
 let playerNr = 1;
 
-//partea care creaza player nou
+// partea care creaza player nou
 let playerInputs = [firstPlayer];
 createPlayerBtn.addEventListener("click", function () {
   if (playerNr <= 3) {
@@ -59,7 +71,7 @@ createPlayerBtn.addEventListener("click", function () {
   }
 });
 
-//partea care sterge un player
+// partea care sterge un player
 
 deletePlayerBtn.addEventListener("click", function () {
   if (playerNr > 2) {
@@ -71,7 +83,7 @@ deletePlayerBtn.addEventListener("click", function () {
   }
 });
 
-//partea din dreapta - Game
+// partea din dreapta - Game
 
 // @@@@@@ DROPDOWN ARRAYS @@@@@@ //
 let difficultyOptions = ["Any difficulty", "Easy", "Medium", "Hard"];
@@ -178,7 +190,7 @@ submitBtn.addEventListener("click", function () {
   let difficultyLink = difficulty.value;
   createURL(categoryLink, difficultyLink, answerLink);
 
-  //do not remove this lines - ment to do something and turned off just for working purpose;
+  // do not remove this lines - ment to do something and turned off just for working purpose;
   // document.body.removeChild(container);
   // document.head.removeChild(styleLink);
   console.log(playerNr);
