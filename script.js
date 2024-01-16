@@ -9,6 +9,7 @@ styleLink.setAttribute("href", "beforeGameStyles.css");
 styleLink.setAttribute("rel", "stylesheet");
 
 document.body.appendChild(container);
+document.body.style.backgroundColor = "#222";
 document.head.appendChild(styleLink);
 container.classList.add("container");
 container.innerHTML = `
@@ -38,22 +39,22 @@ container.innerHTML = `
 //partea ce se ocupa cu butoanele de creare a jucatorilor maxim 4 minim 1
 let createPlayerBtn = document.getElementById("create-player");
 let deletePlayerBtn = document.getElementById("delete-player");
-let playerNr = 2;
+let firstPlayer = document.getElementById("player1");
+let playerNr = 1;
 
 //partea care creaza player nou
-let players = [""];
+let playerInputs = [firstPlayer];
 createPlayerBtn.addEventListener("click", function () {
-  if (playerNr <= 4) {
-    let playerClass = "Player " + `${playerNr}`;
+  if (playerNr <= 3) {
+    let playerClass = "Player " + `${playerNr + 1}`;
     let inputElement = document.createElement("input");
-
     inputElement.type = "text";
     inputElement.placeholder = `${playerClass}`;
-    inputElement.classList.add("box", `player${playerNr}`);
-    inputElement.setAttribute("id", `player${playerNr}`);
+    inputElement.classList.add("box", `player${playerNr + 1}`);
+    inputElement.setAttribute("id", `player${playerNr + 1}`);
+    inputElement.setAttribute("value", "");
     document.querySelector(".players-box").appendChild(inputElement);
-
-    players.push(inputElement.value);
+    playerInputs.push(inputElement);
     playerNr++;
   }
 });
@@ -64,12 +65,12 @@ deletePlayerBtn.addEventListener("click", function () {
   if (playerNr > 2) {
     let playersBox = document.querySelector(".players-box");
     let lastPlayerInput = playersBox.querySelector(`.player${playerNr - 1}`);
-
     playersBox.removeChild(lastPlayerInput);
-    players.pop();
+    playerInputs.remove(lastPlayerInput);
     playerNr--;
   }
 });
+
 //partea din dreapta - Game
 
 // @@@@@@ DROPDOWN ARRAYS @@@@@@ //
@@ -176,8 +177,17 @@ submitBtn.addEventListener("click", function () {
   let answerLink = answer.value;
   let difficultyLink = difficulty.value;
   createURL(categoryLink, difficultyLink, answerLink);
-  document.body.removeChild(container);
-  document.head.removeChild(styleLink);
+
+  //do not remove this lines - ment to do something and turned off just for working purpose;
+  // document.body.removeChild(container);
+  // document.head.removeChild(styleLink);
+  console.log(playerNr);
+  console.log(playerInputs);
+
+  let playerNames = [];
+  for (let i = 0; i <= playerInputs.length; i++) {
+    playerNames.push(playerInputs[i].value);
+  }
 });
 
 function createURL(par1, par2, par3) {
@@ -185,4 +195,3 @@ function createURL(par1, par2, par3) {
   url = url + par1 + par2 + par3;
   console.log(url);
 }
-// capturat in arrayul cu numele players.
