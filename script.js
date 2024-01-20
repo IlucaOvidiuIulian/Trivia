@@ -1,197 +1,159 @@
 "use strict";
 
-//partea care creaza structura html de baza
+//dropdown arrays
 
+let categories = [
+  { name: "All categories", value: "" },
+  { name: "General Knowledge", value: "&category=9" },
+  { name: "Entertainment: Books", value: "&category=10" },
+  { name: "Entertainment: Film", value: "&category=11" },
+  { name: "Entertainment: Music", value: "&category=12" },
+  { name: "Entertainment: Musicals & Theatres", value: "&category=13" },
+  { name: "Entertainment: Television", value: "&category=14" },
+  { name: "Entertainment: Video Games", value: "&category=15" },
+  { name: "Entertainment: Board Games", value: "&category=16" },
+  { name: "Science & Nature", value: "&category=17" },
+  { name: "Science: Computers", value: "&category=18" },
+  { name: "Science: Mathematics", value: "&category=19" },
+  { name: "Mythology", value: "&category=20" },
+  { name: "Sports", value: "&category=21" },
+  { name: "Geography", value: "&category=22" },
+  { name: "History", value: "&category=23" },
+  { name: "Politics", value: "&category=24" },
+  { name: "Art", value: "&category=25" },
+  { name: "Celebrities", value: "&category=26" },
+  { name: "Animals", value: "&category=27" },
+  { name: "Vehicles", value: "&category=28" },
+  { name: "Entertainment: Comics", value: "&category=29" },
+  { name: "Science: Gadgets", value: "&category=30" },
+  { name: "Entertainment: Japanese Anime & Manga", value: "&category=31" },
+  { name: "Entertainment: Cartoon & Animations", value: "&category=32" },
+];
+let answers = [
+  { name: "Any type", value: "" },
+  { name: "With multiple answers", value: "&type=multiple" },
+  { name: "With 2 answers", value: "&type=boolean" },
+];
+let difficultyLevels = [
+  { name: "Any difficulty", value: "" },
+  { name: "Easy", value: "&difficulty=easy" },
+  { name: "Medium", value: "&difficulty=medium" },
+  { name: "Hard", value: "&difficulty=hard" },
+];
+// partea suport al HTML
 let container = document.createElement("div");
-let styleLink = document.createElement("link");
-
-styleLink.setAttribute("href", "beforeGameStyles.css");
-styleLink.setAttribute("rel", "stylesheet");
-
 document.body.appendChild(container);
-document.body.style.backgroundColor = "#222";
-document.head.appendChild(styleLink);
 container.classList.add("container");
-container.innerHTML = `
-  <div class="players-box">
-    <h1>Create players</h1>
-    <div class="player-control-btns">
-      <button id="create-player" class="btn"><p>Add player</p></button>
-      <button id="delete-player" class="btn"><p>Delete player</p></button>
-    </div>
-    <input type="text" id ="player1" placeholder="Player 1" class="box player1"/>
-  </div>
-  <div class="game-box">
-    <div>
-      <select class="dropdown" id="difficulty" ></select> 
-    </div>
-   
-    <div>
-      <select class="dropdown" id="category"></select>
-    </div>
-    <div>
-      <select class="dropdown" id="answer-type"></select>
-    </div>
-    <div class="submit-box">
-    <button id="submit" class="btn submit">Start Game</button></div>
-  </div>
+
+// partea din stanga - se ocupa cu player management-ul jocului
+let leftSection = document.createElement("div");
+container.appendChild(leftSection);
+leftSection.classList.add("left-section");
+
+leftSection.innerHTML = `
+<div class="title"><span>Create Player</span></div>
+<div class="btn-section">
+  <button class="btn addBtn">Add player</button>
+  <button class="btn delBtn">Delete player</button>
+</div>
+<div class="player-section"></div>
 `;
-//partea ce se ocupa cu butoanele de creare a jucatorilor maxim 4 minim 1
-let createPlayerBtn = document.getElementById("create-player");
-let deletePlayerBtn = document.getElementById("delete-player");
-let firstPlayer = document.getElementById("player1");
-let playerNr = 1;
 
-//partea care creaza player nou
-let playerInputs = [firstPlayer];
-createPlayerBtn.addEventListener("click", function () {
+let addBtn = document.querySelector(".addBtn");
+let delBtn = document.querySelector(".delBtn");
+
+let playerSection = document.querySelector(".player-section");
+let playerNr = 0;
+let inputs = document.querySelectorAll(".playerInput");
+
+function createPlayer(parent) {
   if (playerNr <= 3) {
-    let playerClass = "Player " + `${playerNr + 1}`;
-    let inputElement = document.createElement("input");
-    inputElement.type = "text";
-    inputElement.placeholder = `${playerClass}`;
-    inputElement.classList.add("box", `player${playerNr + 1}`);
-    inputElement.setAttribute("id", `player${playerNr + 1}`);
-    inputElement.setAttribute("value", "");
-    document.querySelector(".players-box").appendChild(inputElement);
-    playerInputs.push(inputElement);
+    let input = document.createElement("input");
+    input.placeholder = "Player " + Number(playerNr + 1);
+    input.type = "text";
+    input.classList.add("playerInput");
+    parent.appendChild(input);
     playerNr++;
+    inputs = document.querySelectorAll(".playerInput");
   }
+}
+addBtn.addEventListener("click", function () {
+  createPlayer(playerSection);
 });
 
-//partea care sterge un player
-
-deletePlayerBtn.addEventListener("click", function () {
-  if (playerNr > 2) {
-    let playersBox = document.querySelector(".players-box");
-    let lastPlayerInput = playersBox.querySelector(`.player${playerNr - 1}`);
-    playersBox.removeChild(lastPlayerInput);
-    playerInputs.remove(lastPlayerInput);
+function deletePlayer(parent) {
+  let lastInput = inputs[inputs.length - 1];
+  if (lastInput) {
+    parent.removeChild(lastInput);
     playerNr--;
+    inputs = document.querySelectorAll(".playerInput");
   }
+}
+delBtn.addEventListener("click", function () {
+  deletePlayer(playerSection);
 });
 
-//partea din dreapta - Game
+//partea din dreapta - se ocupa cu selectarea tipului de joc.
 
-// @@@@@@ DROPDOWN ARRAYS @@@@@@ //
-let difficultyOptions = ["Any difficulty", "Easy", "Medium", "Hard"];
-let difficultyValues = [
-  "",
-  "&difficulty=easy",
-  "&difficulty=medium",
-  "&difficulty=hard",
-];
-let answerOptions = ["Any type", "With multiple answers", "With 2 answers"];
-let answerValues = ["", "&type=multiple", "&type=boolean"];
-let categoryOptions = [
-  "All categories",
-  "General Knowledge",
-  "Entertainment: Books",
-  "Entertainment: Film",
-  "Entertainment: Music",
-  "Entertainment: Musicals & Theatres",
-  "Entertainment: Television",
-  "Entertainment: Video Games",
-  "Entertainment: Board Games",
-  "Science & Nature",
-  "Science: Computers",
-  "Science: Mathematics",
-  "Mythology",
-  "Sports",
-  "Geography",
-  "History",
-  "Politics",
-  "Art",
-  "Celebrities",
-  "Animals",
-  "Vehicles",
-  "Entertainment: Comics",
-  "Science: Gadgets",
-  "Entertainment: Japanese Anime & Manga",
-  "Entertainment: Cartoon & Animations",
-];
+let rightSection = document.createElement("div");
+container.appendChild(rightSection);
+rightSection.classList.add("right-section");
 
-let categoryValues = [
-  "",
-  "&category=9",
-  "&category=10",
-  "&category=11",
-  "&category=12",
-  "&category=13",
-  "&category=14",
-  "&category=15",
-  "&category=16",
-  "&category=17",
-  "&category=18",
-  "&category=19",
-  "&category=20",
-  "&category=21",
-  "&category=22",
-  "&category=23",
-  "&category=24",
-  "&category=25",
-  "&category=26",
-  "&category=27",
-  "&category=28",
-  "&category=29",
-  "&category=30",
-  "&category=31",
-  "&category=32",
-];
-// functie ce itereaza prin array-urile de values si de nume
-let difficulty = document.getElementById("difficulty");
-let category = document.getElementById("category");
-let answer = document.getElementById("answer-type");
+rightSection.innerHTML = `
+<div class="title"><span>Create Game</span></div>
+<select class="category dropdown" value=""></select>
+<select class="difficulty dropdown" value=""></select>
+<select class="answer dropdown" value=""></select>
+`;
 
-function createOptions(selectedElement, optionsArray, valuesArray) {
-  for (let i = 0; i < optionsArray.length; i++) {
+// dropdown logic
+function createDropdowns(array, selector) {
+  for (let i = 0; i < array.length; i++) {
     let option = document.createElement("option");
-    option.value = valuesArray[i];
-    option.text = optionsArray[i];
-    selectedElement.appendChild(option);
+    option.textContent = array[i].name;
+    option.value = array[i].value;
+    selector.appendChild(option);
   }
 }
-createOptions(difficulty, difficultyOptions, difficultyValues);
-createOptions(answer, answerOptions, answerValues);
-createOptions(category, categoryOptions, categoryValues);
-/*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-USE THIS IF YOU WANT TO TEST THE VALUES OF DROPDOWNS IN CONSOLE
-function testValues(element) {
-  element.addEventListener("change", function () {
-    console.log(element.value);
-  });
-}
+let categorySelector = document.querySelector(".category");
+let difficultySelector = document.querySelector(".difficulty");
+let answerSelector = document.querySelector(".answer");
 
-testValues(difficulty);
-testValues(answer);
-testValues(category);
-vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-*/
+createDropdowns(difficultyLevels, difficultySelector);
+createDropdowns(categories, categorySelector);
+createDropdowns(answers, answerSelector);
 
-// PARTEA CE SE OCUPA DE BUTONUL DE SUBMIT SI SALVEAZA URL-ul pentru fetch;
+//url logic
+
 let url;
-let submitBtn = document.getElementById("submit");
-submitBtn.addEventListener("click", function () {
-  let categoryLink = category.value;
-  let answerLink = answer.value;
-  let difficultyLink = difficulty.value;
-  createURL(categoryLink, difficultyLink, answerLink);
+function createUrl(par1, par2, par3) {
+  return (url = "https://opentdb.com/api.php?amount=50" + par1 + par2 + par3);
+}
+// submit logic
 
-  //do not remove this lines - ment to do something and turned off just for working purpose;
-  // document.body.removeChild(container);
-  // document.head.removeChild(styleLink);
-  console.log(playerNr);
-  console.log(playerInputs);
+let submit = document.createElement("button");
+submit.classList.add("submit-btn");
+submit.textContent = "START GAME";
+container.appendChild(submit);
 
-  let playerNames = [];
-  for (let i = 0; i <= playerInputs.length; i++) {
-    playerNames.push(playerInputs[i].value);
+let playerNames = [];
+function savePlayerNames() {
+  inputs.forEach(function (input) {
+    playerNames.push(input.value);
+  });
+
+  return playerNames;
+}
+submit.addEventListener("click", function () {
+  savePlayerNames();
+  createUrl(
+    categorySelector.value,
+    difficultySelector.value,
+    answerSelector.value
+  );
+  if (playerNr > 0) {
+    alert("Game will start soon");
+  } else {
+    alert("Add at least 1 player");
   }
 });
-
-function createURL(par1, par2, par3) {
-  url = "https://opentdb.com/api.php?amount=50";
-  url = url + par1 + par2 + par3;
-  console.log(url);
-}
